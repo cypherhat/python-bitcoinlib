@@ -7,6 +7,7 @@ focus on providing tools to manipulate the internals of how Bitcoin works.
 
 "The Swiss Army Knife of the Bitcoin protocol." - Wladimir J. van der Laan
 
+Repackaging for compatibility with https://github.com/vbuterin/pybitcointools
 
 Requirements
 ------------
@@ -30,7 +31,7 @@ bitcoin.core.key        - ECC pubkeys
 bitcoin.core.script     - Scripts and opcodes
 bitcoin.core.scripteval - Script evaluation/verification
 bitcoin.core.serialize  - Serialization
-
+    
 In the future the bitcoin.core may use the Satoshi sourcecode directly as a
 library. Non-consensus critical modules include the following:
 
