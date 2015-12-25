@@ -13,8 +13,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import unittest
 
-from bitcoin.wallet import CBitcoinSecret
-from bitcoin.signmessage import BitcoinMessage, VerifyMessage, SignMessage
+from bitcoinlib.wallet import CBitcoinSecret
+from bitcoinlib.signmessage import BitcoinMessage, VerifyMessage, SignMessage
 import sys
 import os
 import json

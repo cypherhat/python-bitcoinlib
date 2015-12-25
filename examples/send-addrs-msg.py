@@ -1,11 +1,11 @@
-import socket, time, bitcoin
-from bitcoin.messages import msg_version, msg_verack, msg_addr
-from bitcoin.net import CAddress
+import socket, time, bitcoinlib
+from bitcoinlib.messages import msg_version, msg_verack, msg_addr
+from bitcoinlib.net import CAddress
 
 
 PORT = 18333
 
-bitcoin.SelectParams('testnet') 
+bitcoinlib.SelectParams('testnet')
 
 def version_pkt(client_ip, server_ip):
     msg = msg_version()

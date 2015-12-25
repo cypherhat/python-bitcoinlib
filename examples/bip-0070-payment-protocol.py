@@ -14,7 +14,7 @@
 """Bip-0070-related functionality
 
 Creates http response objects suitable for use with
-bitcoin bip 70 using googles protocol buffers.
+bitcoinlib bip 70 using googles protocol buffers.
 """
 
 import urllib2
@@ -23,11 +23,11 @@ import urllib2
 import payments_pb2
 o = payments_pb2
 
-import bitcoin
-#bitcoin.SelectParams('testnet')
-from bitcoin.wallet import CBitcoinAddress
-from bitcoin.core.script import CScript
-from bitcoin.rpc import Proxy
+import bitcoinlib
+#bitcoinlib.SelectParams('testnet')
+from bitcoinlib.wallet import CBitcoinAddress
+from bitcoinlib.core.script import CScript
+from bitcoinlib.rpc import Proxy
 
 from time import time
 
@@ -38,7 +38,7 @@ def payment_request():
     btc = bc.getnewaddress()
 
 #   Setting the 'amount' field to 0 (zero) should prompt the user to enter
-#   the amount for us but a bug in bitcoin core qt version 0.9.1 (at time of
+#   the amount for us but a bug in bitcoinlib core qt version 0.9.1 (at time of
 #   writing) wrongly informs us that the value is too small and aborts.
 #   https://github.com/bitcoin/bitcoin/issues/3095
 #   Also there can be no leading 0's (zeros).
@@ -58,8 +58,8 @@ def payment_request():
     sds_pr = pro.SerializeToString()
 
     open('sds_pr_blob', 'wb').write(sds_pr)
-    headers = {'Content-Type': 'application/bitcoin-payment',
-               'Accept': 'application/bitcoin-paymentrequest'}
+    headers = {'Content-Type': 'application/bitcoinlib-payment',
+               'Accept': 'application/bitcoinlib-paymentrequest'}
     http_response_object = urllib2.Request('file:sds_pr_blob', None, headers)
 
     return http_response_object
@@ -77,7 +77,7 @@ def payment_ack(serialized_Payment_message):
     sds_pa = pao.SerializeToString()
 
     open('sds_pa_blob', 'wb').write(sds_pa)
-    headers = {'Content-Type' : 'application/bitcoin-payment', 'Accept' : 'application/bitcoin-paymentack'}
+    headers = {'Content-Type' : 'application/bitcoinlib-payment', 'Accept' : 'application/bitcoinlib-paymentack'}
     http_response_object = urllib2.Request('file:sds_pa_blob', None, headers)
 
     return http_response_object

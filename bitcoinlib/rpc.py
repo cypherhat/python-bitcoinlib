@@ -16,8 +16,8 @@ By default this uses the standard library ``json`` module. By monkey patching,
 a different implementation can be used instead, at your own risk:
 
 >>> import simplejson
->>> import bitcoin.rpc
->>> bitcoin.rpc.json = simplejson
+>>> import bitcoinlib.rpc
+>>> bitcoinlib.rpc.json = simplejson
 
 (``simplejson`` is the externally maintained version of the same module and
 thus better optimized but perhaps less stable.)
@@ -42,10 +42,10 @@ try:
 except ImportError:
     import urlparse
 
-import bitcoin
-from bitcoin.core import COIN, lx, b2lx, CBlock, CTransaction, COutPoint, CTxOut
-from bitcoin.core.script import CScript
-from bitcoin.wallet import CBitcoinAddress, CBitcoinSecret
+import bitcoinlib
+from bitcoinlib.core import COIN, lx, b2lx, CBlock, CTransaction, COutPoint, CTxOut
+from bitcoinlib.core.script import CScript
+from bitcoinlib.wallet import CBitcoinAddress, CBitcoinSecret
 
 DEFAULT_USER_AGENT = "AuthServiceProxy/0.1"
 
@@ -84,17 +84,17 @@ class BaseProxy(object):
                  timeout=DEFAULT_HTTP_TIMEOUT):
 
         if service_url is None:
-            # Figure out the path to the bitcoin.conf file
+            # Figure out the path to the bitcoinlib.conf file
             if btc_conf_file is None:
                 if platform.system() == 'Darwin':
                     btc_conf_file = os.path.expanduser('~/Library/Application Support/Bitcoin/')
                 elif platform.system() == 'Windows':
                     btc_conf_file = os.path.join(os.environ['APPDATA'], 'Bitcoin')
                 else:
-                    btc_conf_file = os.path.expanduser('~/.bitcoin')
-                btc_conf_file = os.path.join(btc_conf_file, 'bitcoin.conf')
+                    btc_conf_file = os.path.expanduser('~/.bitcoinlib')
+                btc_conf_file = os.path.join(btc_conf_file, 'bitcoinlib.conf')
 
-            # Extract contents of bitcoin.conf to build service_url
+            # Extract contents of bitcoinlib.conf to build service_url
             with open(btc_conf_file, 'r') as fd:
                 # Bitcoin Core accepts empty rpcuser, not specified in btc_conf_file
                 conf = {'rpcuser': ""}
@@ -107,7 +107,7 @@ class BaseProxy(object):
                     conf[k.strip()] = v.strip()
 
                 if service_port is None:
-                    service_port = bitcoin.params.RPC_PORT
+                    service_port = bitcoinlib.params.RPC_PORT
                 conf['rpcport'] = int(conf.get('rpcport', service_port))
                 conf['rpcssl'] = conf.get('rpcssl', '0')
                 conf['rpchost'] = conf.get('rpcconnect', 'localhost')
@@ -217,7 +217,7 @@ class BaseProxy(object):
 
 
 class RawProxy(BaseProxy):
-    """Low-level proxy to a bitcoin JSON-RPC service
+    """Low-level proxy to a bitcoinlib JSON-RPC service
 
     Unlike ``Proxy``, no conversion is done besides parsing JSON. As far as
     Python is concerned, you can call any method; ``JSONRPCError`` will be
@@ -243,16 +243,16 @@ class RawProxy(BaseProxy):
         # Create a callable to do the actual call
         f = lambda *args: self._call(name, *args)
 
-        # Make debuggers show <function bitcoin.rpc.name> rather than <function
-        # bitcoin.rpc.<lambda>>
+        # Make debuggers show <function bitcoinlib.rpc.name> rather than <function
+        # bitcoinlib.rpc.<lambda>>
         f.__name__ = name
         return f
 
 
 class Proxy(BaseProxy):
-    """Proxy to a bitcoin RPC service
+    """Proxy to a bitcoinlib RPC service
 
-    Unlike ``RawProxy``, data is passed as ``bitcoin.core`` objects or packed
+    Unlike ``RawProxy``, data is passed as ``bitcoinlib.core`` objects or packed
     bytes, rather than JSON or hex strings. Not all methods are implemented
     yet; you can use ``call`` to access missing ones in a forward-compatible
     way. Assumes Bitcoin Core version >= 0.9; older versions mostly work, but
@@ -269,7 +269,7 @@ class Proxy(BaseProxy):
 
         If ``service_url`` is not specified, the username and password are read
         out of the file ``btc_conf_file``. If ``btc_conf_file`` is not
-        specified, ``~/.bitcoin/bitcoin.conf`` or equivalent is used by
+        specified, ``~/.bitcoinlib/bitcoinlib.conf`` or equivalent is used by
         default.  The default port is set according to the chain parameters in
         use: mainnet, testnet, or regtest.
 
@@ -588,7 +588,7 @@ class Proxy(BaseProxy):
         """Submit a new block to the network.
 
         params is optional and is currently ignored by bitcoind. See
-        https://en.bitcoin.it/wiki/BIP_0022 for full specification.
+        https://en.bitcoinlib.it/wiki/BIP_0022 for full specification.
         """
         hexblock = hexlify(block.serialize())
         if params is not None:

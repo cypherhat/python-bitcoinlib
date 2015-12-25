@@ -16,13 +16,13 @@
 
 # This sets up SSL on a localhost connection. Not terribly useful but it will be iterated on.
 
-#  Linux: cd ~/.bitcoin
+#  Linux: cd ~/.bitcoinlib
 #  Mac: cd ~/Library/Application\ Support/Bitcoin/
 #  openssl genrsa -out server.pem 2048
 #  openssl req -new -x509 -nodes -sha256 -days 3650 -key server.pem > server.cert
 #  The prompts are optional, you can just hit enter
 
-# Verify that your bitcoin.conf exists in the above directory and contains the following lines:
+# Verify that your bitcoinlib.conf exists in the above directory and contains the following lines:
 # server=1
 # rpcssl=1
 # rpcuser=CHANGETHIS
@@ -31,7 +31,7 @@
 # rpcsslprivatekeyfile=server.pem
 # rpcsslcertificatechainfile=server.cert
 
-import bitcoin.rpc
+import bitcoinlib.rpc
 
-proxy_connection = bitcoin.rpc.Proxy()
+proxy_connection = bitcoinlib.rpc.Proxy()
 print(proxy_connection.getnewaddress())
